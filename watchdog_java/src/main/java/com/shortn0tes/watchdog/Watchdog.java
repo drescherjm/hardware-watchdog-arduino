@@ -24,6 +24,8 @@ public class Watchdog {
     private static final int SECONDS_TO_RECEIVE_HS_RESPONSE = 2;
     private static final int SECONDS_TO_RECEIVE_PONG = 10;
     private static final int MILLIS_BETWEEN_PINGS = 5000;
+	
+	private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     private SerialPortWrapper port;
 
@@ -118,12 +120,13 @@ public class Watchdog {
                 }
             }
         });
-        Executor executor = Executors.newSingleThreadScheduledExecutor();
-        executor.execute(getResponseFromSerialPort);
+        //Executor executor = Executors.newSingleThreadScheduledExecutor();
+        scheduler.execute(getResponseFromSerialPort);
 
         try {
             final String actualResponse = getResponseFromSerialPort.get(timeoutSeconds, TimeUnit.SECONDS);
             LOG.info(String.format("Received the expected [%s] in [%s]", expectedResponse, actualResponse));
+			//executor.shutdown();
             return true;
         } catch (TimeoutException e) {
             LOG.warning("Listening for response cancelled after timeout");
