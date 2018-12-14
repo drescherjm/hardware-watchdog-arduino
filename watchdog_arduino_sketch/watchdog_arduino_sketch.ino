@@ -1,7 +1,7 @@
 //#define DEBUG
 
 #define RESET_PIN 2
-#define PING_TIMEOUT (30 * 1000) // in milliseconds
+#define PING_TIMEOUT (120 * 1000) // in milliseconds
 const String HANDSHAKE = "hello";
 const String HANDSHAKE_RESPONSE = "HELLO";
 const String PING = "ping";
