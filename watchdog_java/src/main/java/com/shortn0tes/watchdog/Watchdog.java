@@ -22,7 +22,7 @@ public class Watchdog {
 
     private static final int MILLIS_TO_INIT_ARDUINO = 3000;
     private static final int SECONDS_TO_RECEIVE_HS_RESPONSE = 2;
-    private static final int SECONDS_TO_RECEIVE_PONG = 30;
+    private static final int SECONDS_TO_RECEIVE_PONG = 60;
     private static final int MILLIS_BETWEEN_PINGS = 15000;
 	
 	private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
