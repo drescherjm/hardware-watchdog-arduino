@@ -1,7 +1,10 @@
 //#define DEBUG
 
 #define RESET_PIN 2
-#define PING_TIMEOUT (120 * 1000) // in milliseconds
+//#define PING_TIMEOUT (90 * 1000) // in milliseconds
+
+const unsigned long PING_TIMEOUT = 120 * 1000ul;
+
 const String HANDSHAKE = "hello";
 const String HANDSHAKE_RESPONSE = "HELLO";
 const String PING = "ping";
@@ -93,18 +96,29 @@ void loop() {
         clearPingBuffer();
       }
     }
-    if (millis() - timestamp > PING_TIMEOUT) {
+
+    unsigned long time = millis();
+
+    // Handle the case where the time wraps around to 0.
+    if ( time < timestamp) {
+      timestamp = time;
+    }
+    else {
+      // The time did not wrap around check for the timeout situation
+      if (time - timestamp > PING_TIMEOUT) {
+      
 #ifdef DEBUG
-      Serial.print("No ping detected for ");
-      Serial.print(PING_TIMEOUT);
-      Serial.println(" millis, restarting...");
+        Serial.print("No ping detected for ");
+        Serial.print(PING_TIMEOUT);
+        Serial.println(" millis, restarting...");
 #endif
-      digitalWrite(RESET_PIN, 1);
-      delay(1000);
-      digitalWrite(RESET_PIN, 0);
-      connected = false;
-      digitalWrite(LED_BUILTIN, 0);
-      clearBuffers();
+        digitalWrite(RESET_PIN, 1);
+        delay(1000);
+        digitalWrite(RESET_PIN, 0);
+        connected = false;
+        digitalWrite(LED_BUILTIN, 0);
+        clearBuffers();
+      }
     }
   }
 }
